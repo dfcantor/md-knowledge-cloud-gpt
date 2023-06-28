@@ -14,9 +14,11 @@ from langchain.llms import OpenAI
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import Chroma
 
-# Setup constants and API keys (not secure!)
+import config
 
-GITHUB_TOKEN = "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"
+# Setup constants and API keys
+
+GITHUB_TOKEN = config.GITHUB_ACCESS_TOKEN
 
 # Definition of utility functions
 

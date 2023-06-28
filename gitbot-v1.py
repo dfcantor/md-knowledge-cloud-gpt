@@ -36,8 +36,8 @@ def parse_github_url(url):
 ## Fetches all files from the specified GitHub repository and folder using the GitHub API.
 
 
-def get_files_from_github_repo(owner, repo, folder, token):
-    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{folder}?recursive=1"
+def get_files_from_github_repo(owner, repo, token):
+    url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/main?recursive=1"
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
@@ -45,9 +45,9 @@ def get_files_from_github_repo(owner, repo, folder, token):
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         content = response.json()
-        return content
+        return content["tree"]
     else:
-        raise ValueError(f"Error fetching folder contents: {response.status_code}")
+        raise ValueError(f"Error fetching repo contents: {response.status_code}")
 
 
 ## Retrieves the contents of Markdown files from the list of files.
@@ -92,7 +92,11 @@ def main():
     parser = argparse.ArgumentParser(
         description="Fetch all *.md files from a GitHub repository."
     )
-    parser.add_argument("url", help="GitHub repository URL")
+    parser.add_argument(
+        "https://github.com/dfcantor/obsidian-vault-sync/tree/main/Obsidian%20Vault",
+        help="GitHub repository URL",
+    )
+
     args = parser.parse_args()
 
     GITHUB_OWNER, GITHUB_REPO = parse_github_url(args.url)
@@ -125,3 +129,9 @@ def main():
         print("\n\n\033[31m" + "Ask a question" + "\033[m")
         user_input = input()
         print("\033[31m" + qa.run(user_input) + "\033[m")
+
+
+# Executing the main function
+
+if __name__ == "__main__":
+    main()
